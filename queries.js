@@ -207,12 +207,12 @@ const toggleImportant = (req, res) => {
         if(error){
             res.status(401).json({
                 success: false,
-                result: 'Unable to toggle completed'
+                result: 'Unable to toggle important'
             });
         }else{
             res.status(200).json({
                 success: true, 
-                result: 'Toggled completed successfully'
+                result: 'Toggled important successfully'
             });
         }
     });

@@ -120,7 +120,109 @@ const login = (req, res) => {
     });
 }
 
+const addTodo = (req, res) => {
+    const userId = req.userData.id;
+    const title = req.body.title;
+    const date = req.body.date;
+
+    const query = 'INSERT INTO tasks(title, date, user_id) VALUES($1, $2, $3) RETURNING *';
+    const values = [title, date, userId];
+
+    client.query(query, values, (error, result) => {
+        console.log(error);
+        if (error) {
+            res.status(401).json({
+                success: false,
+                result: 'Unable to add the Todo to your list'
+            });
+        } else {
+            console.log(result.rows[0]);
+            res.status(200).json({
+                success: true,
+                result: 'Added Todo to your list Successfully'
+            })
+        }
+    });
+}
+
+const getTodos = (req, res) => {
+    const userId = req.userData.id;
+
+    const query = 'SELECT * FROM tasks WHERE user_id = $1';
+    const values = [userId];
+
+    client.query(query, values, (error, result) => {
+        if (error) {
+            console.log(error);
+            res.status(401).json({
+                success: false,
+                result: 'Unable to fetch data'
+            });
+        } else {
+            console.log(result);
+            res.status(200).json({
+                success: true,
+                result: result.rows
+            });
+        }
+    });
+}
+
+const toggleCompleted = (req, res) => {
+    const todoId = req.body.todoId;
+    const userId = req.userData.id;
+
+    console.log(`todoId: ${todoId}, userId: ${userId}`);
+
+    const query = 'UPDATE tasks SET completed = NOT completed WHERE id = $1 and user_id = $2';
+    const values = [todoId, userId];
+
+    client.query(query, values, (error, result) => {
+        console.log(error);
+        if(error){
+            res.status(401).json({
+                success: false,
+                result: 'Unable to toggle completed'
+            });
+        }else{
+            res.status(200).json({
+                success: true, 
+                result: 'Toggled completed successfully'
+            });
+        }
+    });
+}
+
+const toggleImportant = (req, res) => {
+    const todoId = req.body.todoId;
+    const userId = req.userData.id;
+
+    console.log(`todoId: ${todoId}, userId: ${userId}`);
+
+    const query = 'UPDATE tasks SET important = NOT important WHERE id = $1 and user_id = $2';
+    const values = [todoId, userId];
+
+    client.query(query, values, (error, result) => {
+        console.log(error);
+        if(error){
+            res.status(401).json({
+                success: false,
+                result: 'Unable to toggle completed'
+            });
+        }else{
+            res.status(200).json({
+                success: true, 
+                result: 'Toggled completed successfully'
+            });
+        }
+    });
+}
+
 module.exports = {
     signUp,
     login,
+    addTodo,
+    getTodos,
+    toggleCompleted,
+    toggleImportant,
 }

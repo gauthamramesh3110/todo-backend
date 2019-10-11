@@ -13,6 +13,10 @@ app.get('/', (req, res) => {
 
 app.post('/signup', db.signUp);
 app.post('/login', db.login);
+app.post('/addTodo', authCheck, db.addTodo);
+app.get('/getTodos', authCheck, db.getTodos);
+app.post('/toggleCompleted', authCheck, db.toggleCompleted);
+app.post('/toggleImportant', authCheck, db.toggleImportant);
 
 const port = process.env.PORT;
 app.listen(port, () => console.log(`Server started on port ${port}`));

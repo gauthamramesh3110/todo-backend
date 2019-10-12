@@ -148,7 +148,7 @@ const addTodo = (req, res) => {
 const getTodos = (req, res) => {
     const userId = req.userData.id;
 
-    const query = 'SELECT * FROM tasks WHERE user_id = $1 SORT BY completed';
+    const query = 'SELECT * FROM tasks WHERE user_id = $1 ORDER BY completed';
     const values = [userId];
 
     client.query(query, values, (error, result) => {

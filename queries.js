@@ -125,7 +125,7 @@ const addTodo = (req, res) => {
     const title = req.body.title;
     const date = req.body.date;
 
-    const query = 'INSERT INTO tasks(title, date, user_id, date) VALUES($1, $2, $3) RETURNING *';
+    const query = 'INSERT INTO tasks(title, date, user_id) VALUES($1, $2, $3) RETURNING *';
     const values = [title, date, userId];
 
     client.query(query, values, (error, result) => {
